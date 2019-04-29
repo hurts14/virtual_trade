@@ -53,7 +53,7 @@ public class ShortButterfly_Call {
 					if(WIDTH <= nikkeiindex){
 						//精算フェーズ
 						//p/l = ans-ans2
-						pl = v.settelShortButterfly(ERROR) - payment;
+						pl =  payment;
 						//
 						int s1p = v.getSale1();
 						int s2p = v.getSale2();
@@ -72,7 +72,7 @@ public class ShortButterfly_Call {
 							//諦めて精算
 							//精算フェーズ
 							//p/l = ans-ans2
-							pl = v.settelShortButterfly(ERROR) - payment;
+							pl = payment;
 							//
 							int s1p = v.getSale1();
 							int s2p = v.getSale2();
