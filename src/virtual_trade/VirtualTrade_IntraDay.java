@@ -90,13 +90,14 @@ public class VirtualTrade_IntraDay {
 		return brand;
 	}
 	public String getRecord(String Sell1,String Sell2,int alpha){
-		String select06 = "SELECT Time,Trade_Price FROM tick01 WHERE (Price_Type = 'n')AND(Trade_Date = '";
 		String select02 = "')AND(Security_Code = '";
 		String select03 = "')AND(Time like '09%');";
 		String select04 = "SELECT Time,Trade_Price FROM tick01 WHERE (Price_Type = 'o')AND(Trade_Date = '";
-		String select05 = "')AND(Time like '09%')AND(Time = '";
-		String select07 = "%');";
-		String select1 = "",select2 = "",select3 = "",select4 = "";
+		String select05 = "')AND(Time like '09%')AND(";
+		String select06 = "SELECT Time,Trade_Price FROM tick01 WHERE (Price_Type = 'n')AND(Trade_Date = '";
+		String select07 = "%' AND '09";
+		String select08 = "%') limit 1;";
+		String select1 = "",select2 = "";
 		select1 = select04 + day + select02 + Sell1 + select03;
 		select2 = select04 + day + select02 + Sell2 + select03;
 		int error = alpha;
@@ -127,22 +128,40 @@ public class VirtualTrade_IntraDay {
 			price = sell1_price + ',' + sell2_price;
 			return price;
 		}else{
-			/*int t1 = Integer.parseInt(sell1_time.substring(2, 4));
+			int t1 = Integer.parseInt(sell1_time.substring(2, 4));
 			int t2 = Integer.parseInt(sell2_time.substring(2, 4));
 			int m = Math.max(t1, t2);
-			String time = "";
+			String time1 = String.valueOf(m+error);
+			String time2 = String.valueOf(m-error);
 			//中値取ってSQL
-			 * select1 = select06 + day + select02 + Sell1 + select05 + time + select07;
-			 * select2 = select06 + day + select02 + Sell1 + select05 + time + select07;
+			if(t1 == m){
+				select2 = select06 + day + select02 + Sell2 + select05 + time1 + select07 + time2 + select08;
+				sell2 = this.getSelect(select2);
+				try{
+					sell2_time = sell1.split(",")[0];
+					sell2_price = sell1.split(",")[1];
+				}catch(ArrayIndexOutOfBoundsException e){
+					sell2_time = "000000000";
+					sell2_price = "0";
+				}
+			}else{
+				select1 = select06 + day + select02 + Sell1 + select05 + time1 + select07 + time2 + select08;
+				sell1 = this.getSelect(select1);
+				try{
+					sell1_time = sell1.split(",")[0];
+					sell1_price = sell1.split(",")[1];
+				}catch(ArrayIndexOutOfBoundsException e){
+					sell1_time = "000000000";
+					sell1_price = "0";
+				}
+			}
 			if(this.comperToerror(sell1_time, sell2_time, error)){
-				//price = sell1_price + ',' + sell2_price;
-			}else{*/
+				price = sell1_price + ',' + sell2_price;
+				return price;
+			}
 			price = "-1,-1";
-			//return price;
-			//}
 			return price;
 		}
-
 	}
 	public String getRecord(String Sell1,String Sell2,String Buy1,String Buy2,int alpha){
 		//String select01 = "SELECT Trade_Date,Security_code,Time,Trade_Price FROM tick01 WHERE (Price_Type = 'o')AND(Trade_Date = '";

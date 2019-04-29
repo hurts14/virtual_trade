@@ -8,8 +8,8 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.stream.Stream;
 import java.util.Date;
+import java.util.stream.Stream;
 
 public class SetPosition {
 
@@ -50,8 +50,8 @@ public class SetPosition {
 			}
 
 			if(flag){
-				String s = v.setLongStraddle(ERROR);
-				//String s = v.setShortButterfly(WIDTH, ERROR);
+				//String s = v.setLongStraddle(ERROR);
+				String s = v.setShortButterfly(WIDTH, ERROR);
 				s = day + "," + nikkei + "," + s;
 				Output.add(s);
 				flag = false;
@@ -65,7 +65,7 @@ public class SetPosition {
 		}
 
 		try{
-			FileWriter fw = new FileWriter("set"+STRADDLE+".csv", true);
+			FileWriter fw = new FileWriter("set"+BUTTERFLY+".csv", true);
 	        PrintWriter pw = new PrintWriter(new BufferedWriter(fw));
 	        for(String str : Output){
 	        	pw.println(str);

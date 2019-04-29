@@ -20,7 +20,7 @@ public class SettlePosition {
 
 		int LIMIT = 10;    //諦めて精算するまでの日数(day)
 		int WIDTH = 500;   //スプレットの幅及び日経平均の上下幅(yen)
-		int ERROR = 5;
+		int ERROR = 7;
 		int nikkei = 0;
 		int nikkei_abs = 0;
 		int pl = 0;
@@ -34,7 +34,6 @@ public class SettlePosition {
 		ArrayList<String> StrArray = new ArrayList<String>();
 		ArrayList<String> StrArray2 = new ArrayList<String>();
 		ArrayList<String> Output = new ArrayList<String>();
-
 		System.out.println("START PROGRAM.	" + (new Date()));
 
 		try (Stream<String> stream = Files.lines(Paths.get("Logi_-2_predict_date.csv"), StandardCharsets.UTF_8)) {
@@ -53,11 +52,8 @@ public class SettlePosition {
 		}
 		v.setSQL("ume", "umeume");
 		for(String str : StrArray2){
-			out = str.split(",")[0] + "," + str.split(",")[1] + "," + str.split(",")[3] + "," + str.split(",")[5];
-			sell1 = str.split(",")[2];//銘柄
-			sell2 = str.split(",")[4];//銘柄
-			String ss = str.split(",")[0];//日付け
-			pl = Integer.parseInt(str.split(",")[6]);//pl
+			String ss = str.split(",")[0];
+			count = 0;
 			for(String s : StrArray){
 				instruction = s.split(",")[2];
 				n = s.split(",")[1];
@@ -69,16 +65,19 @@ public class SettlePosition {
 					flag = true;
 				}else{
 					if(flag){
-						if((nikkei_abs >= WIDTH)||(count == LIMIT)){
+						if((nikkei_abs >= WIDTH)||(count >= LIMIT)){
 							//精算
+							out = str.split(",")[0] + "," + str.split(",")[1] + "," + str.split(",")[3] + "," + str.split(",")[5];
+							sell1 = str.split(",")[2];
+							sell2 = str.split(",")[4];
+							pl = Integer.parseInt(str.split(",")[6]);
 							//atC,atP,p/l
 							String p = v.settleLongStrddle(sell1,sell2,pl,ERROR);
 							out += "," + day + "," + n + "," + p;
-							Output.add(out);
 							flag = false;
-							break;
+							Output.add(out);
 						}else{
-							++count;
+							count++;
 						}
 					}else{
 					}
@@ -88,17 +87,16 @@ public class SettlePosition {
 		try{
 			//FileWriter fw = new FileWriter("ShortButterfly_Call.csv", true);
 			FileWriter fw = new FileWriter("LongStraddle.csv", true);
-	        PrintWriter pw = new PrintWriter(new BufferedWriter(fw));
-	        for(String line : Output){
-	        	pw.println(line);
-	        }
-	        System.out.println("finish output");
-	        pw.close();
+					PrintWriter pw = new PrintWriter(new BufferedWriter(fw));
+					for(String line : Output){
+						pw.println(line);
+					}
+					System.out.println("finish output");
+					pw.close();
 		}catch(IOException ex){
 			ex.printStackTrace();
 		}
 		System.out.println("END PROGRAM.	" + (new Date()));
-
 	}
 
 }
