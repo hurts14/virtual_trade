@@ -18,7 +18,6 @@ public class VirtualTrade_IntraDay {
 	private int buying1;
 	private int buying2;
 	private int ans = 0;
-	private int ans2;
 	private String buy1 = "";//銘柄
 	private String buy2 = "";
 	private String sell1 = "";
@@ -418,8 +417,9 @@ public class VirtualTrade_IntraDay {
 		//精算フェーズ
 		//値段取って計算
 		String str = "";
+		int x = pl;
 		int e = error;
-		int a = this.makeShortButterfly(Sell1, Sell2, Buy1,Buy2,e)-pl;
+		int a = this.makeShortButterfly(Sell1, Sell2, Buy1,Buy2,e)-x;
 		seal1 = this.getSale1();
 		seal2 = this.getSale2();
 		buying1 = this.getBuying1();

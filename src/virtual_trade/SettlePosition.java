@@ -28,7 +28,7 @@ public class SettlePosition {
 		String instruction;
 		String day;
 		String out = "";
-		String sell1 = "",sell2 = "";
+		String sell1 = "",sell2 = "",buy1 = "", buy2 = "";;
 
 		VirtualTrade_IntraDay v = new VirtualTrade_IntraDay();
 		ArrayList<String> StrArray = new ArrayList<String>();
@@ -43,7 +43,7 @@ public class SettlePosition {
 		}catch(IOException e){
 			e.printStackTrace();
 		}
-		try (Stream<String> stream = Files.lines(Paths.get("setLongStraddle.csv"), StandardCharsets.UTF_8)) {
+		try (Stream<String> stream = Files.lines(Paths.get("setShortButterfly-call.csv"), StandardCharsets.UTF_8)) {
 		    stream.forEach(line -> {
 		    	StrArray2.add(line);
 		    });
@@ -68,11 +68,13 @@ public class SettlePosition {
 						if((nikkei_abs >= WIDTH)||(count >= LIMIT)){
 							//精算
 							out = str.split(",")[0] + "," + str.split(",")[1] + "," + str.split(",")[3] + "," + str.split(",")[5];
-							sell1 = str.split(",")[2];
-							sell2 = str.split(",")[4];
+							sell1 = str.split(",")[4];
+							sell2 = str.split(",")[6];
+							buy1 = str.split(",")[2];
+							buy2 = buy1;
 							pl = Integer.parseInt(str.split(",")[6]);
 							//atC,atP,p/l
-							String p = v.settleLongStrddle(sell1,sell2,pl,ERROR);
+							String p = v.settelShortButterfly(sell1, sell2, buy1, buy2, pl, ERROR);
 							out += "," + day + "," + n + "," + p;
 							flag = false;
 							Output.add(out);
@@ -85,8 +87,8 @@ public class SettlePosition {
 			}
 		}
 		try{
-			//FileWriter fw = new FileWriter("ShortButterfly_Call.csv", true);
-			FileWriter fw = new FileWriter("LongStraddle.csv", true);
+			FileWriter fw = new FileWriter("ShortButterfly_Call.csv", true);
+			//FileWriter fw = new FileWriter("LongStraddle.csv", true);
 					PrintWriter pw = new PrintWriter(new BufferedWriter(fw));
 					for(String line : Output){
 						pw.println(line);
