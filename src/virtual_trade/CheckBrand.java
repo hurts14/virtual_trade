@@ -91,7 +91,7 @@ public class CheckBrand {
 			select1 = select01 + day + select02 + call + select03;
 			select2 = select01 + day + select02 + put + select03;
 			select3 = select01 + date + select02 + call + select03;
-			select4 = select01 + date + select02 + call + select03;
+			select4 = select01 + date + select02 + put + select03;
 
 			ArrayList<String> StrArray = getSelect(select1);
 			ArrayList<String> StrArray2 = getSelect(select2);
